@@ -130,6 +130,7 @@ export default async function RootLayout({ children, params }: Props) {
           disableTransitionOnChange
         >
           <Layout
+            // banner展示代码
             banner={
               <CustomBanner lang={lang} />
             }

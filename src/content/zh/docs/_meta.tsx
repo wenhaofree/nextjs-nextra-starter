@@ -1,5 +1,5 @@
 import type { MetaRecord } from 'nextra'
 
 export default {
-  index: '概览',
+  index: '文档',
 } satisfies MetaRecord

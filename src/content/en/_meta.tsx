@@ -11,25 +11,29 @@ export default {
       toc: false,
     },
   },
-  introduction: {
-    type: 'page',
-    title: 'This is Introduction',
-    theme: {
-      navbar: true,
-      toc: false,
-    },
-  },
-  examples: {
-    title: 'Examples',
-    type: 'page',
-  },
-  upgrade: {
-    title: (
-      <span className="flex items-center leading-[1]">
-        What's New
-        <TitleBadge />
-      </span>
-    ),
+  // introduction: {
+  //   type: 'page',
+  //   title: 'This is Introduction',
+  //   theme: {
+  //     navbar: true,
+  //     toc: false,
+  //   },
+  // },
+  // examples: {
+  //   title: 'Examples',
+  //   type: 'page',
+  // },
+  docs: {
+    title: 'Docs',
     type: 'page',
   },
+  // upgrade: {
+  //   title: (
+  //     <span className="flex items-center leading-[1]">
+  //       What's New
+  //       <TitleBadge />
+  //     </span>
+  //   ),
+  //   type: 'page',
+  // },
 } satisfies MetaRecord

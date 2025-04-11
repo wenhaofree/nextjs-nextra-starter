@@ -25,4 +25,21 @@ export default withNextra({
   sassOptions: {
     silenceDeprecations: ['legacy-js-api'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/en',
+        destination: '/en/docs',
+        permanent: true, // Use true for permanent redirect (308)
+        locale: false, // Important: prevent Next.js from adding locale prefix again
+      },
+      {
+        source: '/zh',
+        destination: '/zh/docs',
+        permanent: true,
+        locale: false,
+      },
+      // Add other redirects here if needed
+    ]
+  },
 })

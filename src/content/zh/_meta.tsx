@@ -11,25 +11,29 @@ export default {
       toc: false,
     },
   },
-  introduction: {
-    type: 'page',
-    title: '这是介绍',
-    theme: {
-      navbar: true,
-      toc: false,
-    },
-  },
-  examples: {
-    title: '示例',
-    type: 'page',
-  },
-  upgrade: {
-    title: (
-      <span className="flex items-center leading-[1]">
-        新变化
-        <TitleBadge />
-      </span>
-    ),
+  // introduction: {
+  //   type: 'page',
+  //   title: '这是介绍',
+  //   theme: {
+  //     navbar: true,
+  //     toc: false,
+  //   },
+  // },
+  // examples: {
+  //   title: '示例',
+  //   type: 'page',
+  // },
+  docs: {
+    title: '文档',
     type: 'page',
   },
+  // upgrade: {
+  //   title: (
+  //     <span className="flex items-center leading-[1]">
+  //       新变化
+  //       <TitleBadge />
+  //     </span>
+  //   ),
+  //   type: 'page',
+  // },
 } satisfies MetaRecord
