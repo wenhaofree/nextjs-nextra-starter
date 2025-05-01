@@ -11,9 +11,16 @@ export default {
       toc: false,
     },
   },
+  blog: {
+    title: 'Blog',
+    type: 'page',
+    theme: {
+      toc: true,
+    },
+  },
   introduction: {
     type: 'page',
-    title: 'This is Introduction',
+    title: 'Introduction',
     theme: {
       navbar: true,
       toc: false,
@@ -26,7 +33,7 @@ export default {
   upgrade: {
     title: (
       <span className="flex items-center leading-[1]">
-        What's New
+        Changes
         <TitleBadge />
       </span>
     ),

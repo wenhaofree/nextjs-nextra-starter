@@ -1,0 +1,196 @@
+---
+title: 'Complete Guide to React Hooks'
+description: 'Deep dive into React Hooks usage and best practices'
+date: '2024-01-10'
+tags: ['React', 'Hooks', 'Frontend']
+author: 'Jane Smith'
+---
+
+# Complete Guide to React Hooks
+
+React Hooks were introduced in React 16.8, allowing developers to use state and other React features without writing class components. This guide explores the usage and best practices of various Hooks.
+
+## Basic Hooks
+
+### useState
+
+`useState` allows function components to have their own state:
+
+```jsx
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <p>Current count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        Increment
+      </button>
+    </div>
+  );
+}
+```
+
+### useEffect
+
+`useEffect` lets you perform side effects in function components, such as data fetching, subscriptions, or manually changing the DOM:
+
+```jsx
+import { useState, useEffect } from 'react';
+
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        const data = await response.json();
+        setUser(data);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [userId]); // Only re-fetch when userId changes
+
+  if (loading) return <div>Loading...</div>;
+  if (!user) return <div>User not found</div>;
+
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <p>Email: {user.email}</p>
+    </div>
+  );
+}
+```
+
+### useContext
+
+`useContext` lets you subscribe to React context without introducing nesting:
+
+```jsx
+import { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext('light');
+
+function App() {
+  const [theme, setTheme] = useState('light');
+  
+  return (
+    <ThemeContext.Provider value={theme}>
+      <div>
+        <Header />
+        <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+          Toggle Theme
+        </button>
+      </div>
+    </ThemeContext.Provider>
+  );
+}
+
+function Header() {
+  const theme = useContext(ThemeContext);
+  return (
+    <header className={`header-${theme}`}>
+      Theme: {theme}
+    </header>
+  );
+}
+```
+
+## Advanced Hooks
+
+### useReducer
+
+For complex state logic, you can use `useReducer`:
+
+```jsx
+import { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  
+  return (
+    <div>
+      Count: {state.count}
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+    </div>
+  );
+}
+```
+
+## Custom Hooks
+
+Creating custom hooks is a great way to reuse stateful logic:
+
+```jsx
+import { useState, useEffect } from 'react';
+
+function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(error);
+      return initialValue;
+    }
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(storedValue));
+  }, [key, storedValue]);
+
+  return [storedValue, setStoredValue];
+}
+
+// Using the custom hook
+function App() {
+  const [name, setName] = useLocalStorage('name', '');
+  
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={e => setName(e.target.value)}
+        placeholder="Enter your name"
+      />
+      <p>Hello, {name}!</p>
+    </div>
+  );
+}
+```
+
+## Rules of Hooks
+
+When using Hooks, you need to follow two rules:
+
+1. **Only call Hooks at the top level**: Don't call Hooks inside loops, conditions, or nested functions
+2. **Only call Hooks from React function components**: Don't call Hooks from regular JavaScript functions
+
+## Conclusion
+
+React Hooks have transformed the way we write React components, making function components more powerful. By using Hooks thoughtfully, you can write more concise, reusable, and testable code.
+
+I hope this guide helps you better understand and use React Hooks! 

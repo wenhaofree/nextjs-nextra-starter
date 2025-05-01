@@ -11,6 +11,13 @@ export default {
       toc: false,
     },
   },
+  blog: {
+    title: '博客',
+    type: 'page',
+    theme: {
+      toc: true,
+    },
+  },
   introduction: {
     type: 'page',
     title: '这是介绍',

@@ -1,0 +1,66 @@
+---
+title: 'Next.js 介绍'
+description: '全面了解 Next.js 框架的基础特性和优势'
+date: '2023-12-15'
+tags: ['Next.js', '前端', 'React']
+author: '张三'
+---
+
+# Next.js 介绍
+
+Next.js 是一个用于构建现代 Web 应用程序的强大 React 框架。它提供了许多内置功能，帮助开发者快速构建高性能、可扩展的应用。
+
+## 主要特性
+
+### 服务器端渲染 (SSR)
+
+Next.js 允许每个页面选择最适合的渲染方式，包括静态生成（SSG）和服务器端渲染（SSR）。这使得应用程序能够在保持良好用户体验的同时提供更好的 SEO 表现。
+
+```jsx
+// pages/index.js
+export default function Home({ data }) {
+  return <div>{data.title}</div>
+}
+
+// 服务器端数据获取
+export async function getServerSideProps() {
+  const res = await fetch('https://api.example.com/data')
+  const data = await res.json()
+  return { props: { data } }
+}
+```
+
+### 文件系统路由
+
+Next.js 使用简单的文件系统路由，让你可以通过创建文件来定义路由，无需复杂的路由配置：
+
+- `pages/index.js` → `/`
+- `pages/blog/[slug].js` → `/blog/:slug`
+- `pages/[...all].js` → `/*`
+
+### API 路由
+
+你可以在 Next.js 应用中创建 API 端点，无需设置单独的后端服务：
+
+```jsx
+// pages/api/hello.js
+export default function handler(req, res) {
+  res.status(200).json({ name: '你好，Next.js!' })
+}
+```
+
+## 性能优化
+
+Next.js 自动执行许多性能优化：
+
+1. **代码拆分** - 每个页面只加载所需的 JavaScript
+2. **图像优化** - 通过内置的 Image 组件自动优化图像
+3. **字体优化** - 无阻塞字体加载
+
+## 结论
+
+Next.js 是构建现代 Web 应用的绝佳选择，特别是当你需要 SEO 优化、性能和开发效率时。它提供了丰富的功能，同时保持了 React 的简洁性和灵活性。
+
+---
+
+希望这篇介绍能帮助你开始使用 Next.js 进行开发！ 

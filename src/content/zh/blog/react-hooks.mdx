@@ -1,0 +1,196 @@
+---
+title: 'React Hooks 完全指南'
+description: '深入探讨 React Hooks 的使用方法和最佳实践'
+date: '2024-01-10'
+tags: ['React', 'Hooks', '前端']
+author: '李四'
+---
+
+# React Hooks 完全指南
+
+React Hooks 是 React 16.8 中引入的特性，允许开发者在不编写类组件的情况下使用状态和其他 React 特性。本指南将深入探讨各种 Hooks 的使用方法和最佳实践。
+
+## 基础 Hooks
+
+### useState
+
+`useState` 允许函数组件拥有自己的状态：
+
+```jsx
+import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <p>当前计数: {count}</p>
+      <button onClick={() => setCount(count + 1)}>
+        增加
+      </button>
+    </div>
+  );
+}
+```
+
+### useEffect
+
+`useEffect` 允许在函数组件中执行副作用操作，例如数据获取、订阅或手动更改 DOM：
+
+```jsx
+import { useState, useEffect } from 'react';
+
+function UserProfile({ userId }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        const data = await response.json();
+        setUser(data);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUser();
+  }, [userId]); // 仅在 userId 变化时重新获取数据
+
+  if (loading) return <div>加载中...</div>;
+  if (!user) return <div>未找到用户</div>;
+
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <p>邮箱: {user.email}</p>
+    </div>
+  );
+}
+```
+
+### useContext
+
+`useContext` 让你可以订阅 React 上下文，而不需要引入嵌套：
+
+```jsx
+import { createContext, useContext, useState } from 'react';
+
+const ThemeContext = createContext('light');
+
+function App() {
+  const [theme, setTheme] = useState('light');
+  
+  return (
+    <ThemeContext.Provider value={theme}>
+      <div>
+        <Header />
+        <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>
+          切换主题
+        </button>
+      </div>
+    </ThemeContext.Provider>
+  );
+}
+
+function Header() {
+  const theme = useContext(ThemeContext);
+  return (
+    <header className={`header-${theme}`}>
+      主题: {theme}
+    </header>
+  );
+}
+```
+
+## 高级 Hooks
+
+### useReducer
+
+对于复杂的状态逻辑，可以使用 `useReducer`：
+
+```jsx
+import { useReducer } from 'react';
+
+const initialState = { count: 0 };
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'increment':
+      return { count: state.count + 1 };
+    case 'decrement':
+      return { count: state.count - 1 };
+    default:
+      throw new Error();
+  }
+}
+
+function Counter() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  
+  return (
+    <div>
+      计数: {state.count}
+      <button onClick={() => dispatch({ type: 'increment' })}>+</button>
+      <button onClick={() => dispatch({ type: 'decrement' })}>-</button>
+    </div>
+  );
+}
+```
+
+## 自定义 Hooks
+
+创建自定义 Hook 是复用有状态逻辑的好方法：
+
+```jsx
+import { useState, useEffect } from 'react';
+
+function useLocalStorage(key, initialValue) {
+  const [storedValue, setStoredValue] = useState(() => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      console.error(error);
+      return initialValue;
+    }
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem(key, JSON.stringify(storedValue));
+  }, [key, storedValue]);
+
+  return [storedValue, setStoredValue];
+}
+
+// 使用自定义 Hook
+function App() {
+  const [name, setName] = useLocalStorage('name', '');
+  
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={e => setName(e.target.value)}
+        placeholder="输入你的名字"
+      />
+      <p>你好, {name}!</p>
+    </div>
+  );
+}
+```
+
+## Hooks 使用规则
+
+使用 Hooks 需要遵循两条规则：
+
+1. **只在最顶层调用 Hooks**：不要在循环、条件或嵌套函数中调用 Hooks
+2. **只在 React 函数组件中调用 Hooks**：不要在普通 JavaScript 函数中调用 Hooks
+
+## 结论
+
+React Hooks 彻底改变了我们编写 React 组件的方式，让函数组件变得更加强大。通过合理使用 Hooks，你可以编写更加简洁、可复用和易于测试的代码。
+
+希望这篇指南能帮助你更好地理解和使用 React Hooks！ 
