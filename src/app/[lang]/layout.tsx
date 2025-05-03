@@ -94,7 +94,7 @@ interface Props {
 
 export default async function RootLayout({ children, params }: Props) {
   const { lang } = await params
-  const dictionary = await getDictionary(lang)
+  // const dictionary = await getDictionary(lang)
   const pageMap = await getPageMap(lang)
 
   const title = 'My Nextra Starter'
