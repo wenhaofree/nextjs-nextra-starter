@@ -54,7 +54,7 @@ function getBlogPosts(lang: string) {
       date: data.date,
       tags: data.tags || [],
       author: data.author || (data.authors ? (Array.isArray(data.authors) ? data.authors[0] : data.authors) : ''),
-      image: data.image || `/img/blog/${slug}-card.webp`, // 默认图片路径
+      image: data.image || null, // 只使用文章中明确指定的图片，否则为null
     }
   })
 

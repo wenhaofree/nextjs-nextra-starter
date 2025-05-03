@@ -10,7 +10,18 @@ const dictionaries = {
 
 export const getDictionary = async (
   locale: keyof typeof dictionaries,
-): Promise<typeof Zh> => (await dictionaries[locale]()).default
+): Promise<typeof Zh> => {
+  try {
+    const module = await dictionaries[locale]()
+    return module.default
+  }
+  catch (error) {
+    console.error(`Error loading dictionary for locale: ${locale}`, error)
+    // 如果加载失败，回退到中文
+    const zhModule = await dictionaries.zh()
+    return zhModule.default
+  }
+}
 
 export const getDirection = (locale: keyof typeof dictionaries) => {
   switch (locale) {

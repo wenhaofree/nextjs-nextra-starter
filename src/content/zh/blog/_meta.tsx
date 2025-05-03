@@ -10,28 +10,28 @@ export default {
       breadcrumb: false,
     },
   },
-  'nextjs-introduction': {
-    title: 'Next.js 介绍',
-    theme: {
-      toc: true,
-      timestamp: true,
-      typesetting: 'article',
-    },
-  },
-  'react-hooks': {
-    title: 'React Hooks 完全指南',
-    theme: {
-      toc: true,
-      timestamp: true,
-      typesetting: 'article',
-    },
-  },
-  'tailwind-tricks': {
-    title: 'Tailwind CSS 实用技巧',
-    theme: {
-      toc: true,
-      timestamp: true,
-      typesetting: 'article',
-    },
-  },
+  // 'nextjs-introduction': {
+  //   title: 'Next.js 介绍',
+  //   theme: {
+  //     toc: true,
+  //     timestamp: true,
+  //     typesetting: 'article',
+  //   },
+  // },
+  // 'react-hooks': {
+  //   title: 'React Hooks 完全指南',
+  //   theme: {
+  //     toc: true,
+  //     timestamp: true,
+  //     typesetting: 'article',
+  //   },
+  // },
+  // 'tailwind-tricks': {
+  //   title: 'Tailwind CSS 实用技巧',
+  //   theme: {
+  //     toc: true,
+  //     timestamp: true,
+  //     typesetting: 'article',
+  //   },
+  // },
 } satisfies MetaRecord

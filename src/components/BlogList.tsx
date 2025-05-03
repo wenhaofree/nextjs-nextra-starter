@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
@@ -10,14 +11,22 @@ interface BlogPost {
   date: string
   tags: string[]
   author: string
+  image: string
 }
 
 interface BlogListProps {
   lang: 'zh' | 'en'
 }
 
+// 添加cn工具函数用于合并className
+const cn = (...classes: (string | boolean | undefined)[]) => {
+  return classes.filter(Boolean).join(' ')
+}
+
 export const BlogList: React.FC<BlogListProps> = ({ lang }) => {
   const [posts, setPosts] = useState<BlogPost[]>([])
+  // 跟踪每个图片的加载状态
+  const [imageStates, setImageStates] = useState<Record<string, { loaded: boolean, error: boolean }>>({})
 
   useEffect(() => {
     async function fetchBlogPosts() {
@@ -38,16 +47,83 @@ export const BlogList: React.FC<BlogListProps> = ({ lang }) => {
     })
   }
 
+  // 处理图片加载完成
+  const handleImageLoad = (slug: string) => {
+    setImageStates(prev => ({
+      ...prev,
+      [slug]: { loaded: true, error: false },
+    }))
+  }
+
+  // 处理图片加载错误
+  const handleImageError = (slug: string) => {
+    setImageStates(prev => ({
+      ...prev,
+      [slug]: { loaded: false, error: true },
+    }))
+  }
+
   return (
     <div className="mt-12 space-y-10">
       {posts.map((post) => (
         <article key={post.slug} className="relative isolate flex flex-col gap-4 lg:flex-row">
-          <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0">
-            {/* Optional: Add image back here if needed, styled appropriately for list view */}
-            {/* <img src={post.image || 'default-image.jpg'} alt="" className="absolute inset-0 h-full w-full rounded-2xl bg-gray-50 object-cover" /> */}
-            {/* <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10" /> */}
-            {/* For now, a placeholder or empty div might be better based on the reference image */}
-            <div className="absolute inset-0 rounded-lg bg-gray-100 dark:bg-gray-800"></div>
+          <div className="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-64 lg:shrink-0 overflow-hidden rounded-2xl">
+            {/* 背景渐变效果 */}
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/30 z-10"></div>
+
+            {/* 图片加载占位符 - 只在没有图片时显示 */}
+            {!post.image && (
+              <div className="absolute inset-0 flex items-center justify-center z-10">
+                <div className="text-center w-full h-full relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    {/* 使用重复的wenhaofree文字作为背景 */}
+                    <div className="absolute inset-0 grid place-items-center overflow-hidden">
+                      <div className="transform -rotate-12">
+                        {Array.from({ length: 10 }).map((_, i) => (
+                          <div key={i} className="flex gap-2 opacity-10">
+                            {Array.from({ length: 5 }).map((_, j) => (
+                              <span key={j} className="text-lg font-bold text-primary whitespace-nowrap dark:text-blue-300 text-blue-600">
+                                wenhaofree.com
+                              </span>
+                            ))}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    {/* 中央突出的wenhaofree.com标志 */}
+                    {/* <div className="bg-black/20 backdrop-blur-sm px-4 py-2 rounded-lg z-10 border border-white/10">
+                      <span className="text-xl font-bold text-white">WENHAOFREE</span>
+                    </div> */}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 博客图片 */}
+            {post.image && (
+              <div className="relative w-full h-full">
+                <Image
+                  src={post.image}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  loading="lazy"
+                  quality={80}
+                  placeholder="blur"
+                  blurDataURL="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 225' width='400' height='225'%3E%3Crect width='400' height='225' fill='%23f5f5f5'/%3E%3C/svg%3E"
+                  className="object-cover"
+                  style={{ objectFit: 'cover' }}
+                  onError={() => handleImageError(post.slug)}
+                />
+              </div>
+            )}
+
+            {/* 没有图片或图片加载错误时显示纯色背景 */}
+            {(!post.image || imageStates[post.slug]?.error) && (
+              <div className="absolute inset-0 rounded-2xl bg-gray-100 dark:bg-gray-800"></div>
+            )}
+
+            <div className="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10 z-20" />
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-x-4 text-xs mb-2">
